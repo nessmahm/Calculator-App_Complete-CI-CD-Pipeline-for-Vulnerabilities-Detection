@@ -37,19 +37,10 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL}} # URL pour le serveur SonarQube/SonarCloud
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
           SONAR_SCANNER_OPTS: "-X"
-
-
-      - name: Check for critical issues
-        run: |
-          CRITICAL_ISSUES=$(curl -s -u ${{ secrets.SONARQUBE_TOKEN }}: "https://your-sonar-instance/api/issues/search?severity=CRITICAL&projectKeys=nessmahm_calculator")
-          if [[ $(echo $CRITICAL_ISSUES | jq '.total') -gt 0 ]]; then
-          echo "Critical issues detected, stopping the build!";
-          exit 1;  # Arrêter la construction si des problèmes critiques sont trouvés
-          fi
-
-
-
-
+        with:
+          args: >
+            -Dsonar.projectKey=your_project_key
+            -Dsonar.qualitygate.wait=true # Attendre l'état de la Quality Gate
 #Afficher un message de confirmation
       - name: Confirm Build Success
         run: echo "Build completed successfully!"
