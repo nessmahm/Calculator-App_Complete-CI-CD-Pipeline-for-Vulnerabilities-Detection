@@ -42,13 +42,12 @@ jobs:
             -Dsonar.projectKey=nessmahm_calculator
             -Dsonar.qualitygate.wait=true # Attendre l'état de la Quality Gate
 
-      - name: Check Critical Issues
+      - name: Check Quality Gate Status
         run: |
-          CRITICAL_ISSUES=$(curl -s -u ${{ secrets.SONARQUBE_TOKEN }} \
-            "${{ secrets.SONAR_HOST_URL }}/api/issues/search?severity=CRITICAL&projectKeys=nessmahm_calculator")
-          if [[ $(echo $CRITICAL_ISSUES | jq '.total') -gt 0 ]]; then
-            echo "Critical issues detected, stopping the build!"
-            exit 1
+          STATUS=$(curl -s -u ${{ secrets.SONARQUBE_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=nessmahm_calculator" | jq -r '.projectStatus.status')
+          if [ "$STATUS" != "OK" ]; then
+          echo "Quality Gate failed: $STATUS"
+          exit 1
           fi
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
