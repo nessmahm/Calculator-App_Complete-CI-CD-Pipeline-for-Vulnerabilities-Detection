@@ -36,6 +36,8 @@ jobs:
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL}} # URL pour le serveur SonarQube/SonarCloud
           SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_SCANNER_OPTS: "-X"
+
 
       - name: Check for critical issues
         run: |
