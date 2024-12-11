@@ -1,4 +1,4 @@
-name: Reactjs CI/CD Pipeline
+name: Calculator CI/CD Pipeline
 
 on:
   push:
