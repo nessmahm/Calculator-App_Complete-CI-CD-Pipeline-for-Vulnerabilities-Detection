@@ -17,11 +17,5 @@ export function divide(a, b) {
         throw new Error('Cannot divide by zero');
     }
 
-    // Vulnerability: Accepts a string for evaluation
-    if (typeof b === 'string') {
-        // Potential Code Injection via eval
-        return eval(b);
-    }
-
     return a / b;
 }
