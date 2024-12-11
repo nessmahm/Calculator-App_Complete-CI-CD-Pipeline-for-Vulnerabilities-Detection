@@ -39,7 +39,7 @@ jobs:
           SONAR_SCANNER_OPTS: "-X"
         with:
           args: >
-            -Dsonar.projectKey=your_project_key
+            -Dsonar.projectKey=nessmahm_calculator
             -Dsonar.qualitygate.wait=true # Attendre l'état de la Quality Gate
 #Afficher un message de confirmation
       - name: Confirm Build Success
