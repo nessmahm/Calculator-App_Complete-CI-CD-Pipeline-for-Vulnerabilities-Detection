@@ -43,18 +43,5 @@ jobs:
             -Dsonar.qualitygate.wait=true # Attendre l'état de la Quality Gate
             -Dsonar.qualitygate.timeout=300
 
-      # Check the Quality Gate status.
-      - name: SonarQube Server Quality Gate check
-        id: sonarqube-quality-gate-check
-        uses: sonarsource/sonarqube-quality-gate-action@master
-        with:
-          pollingTimeoutSec: 600
-        env:
-          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} #OPTIONAL
-
-      - name: "Example show SonarQube Server Quality Gate Status value"
-        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
-
       - name: Confirm Build Success
         run: echo "Build completed successfully!"
