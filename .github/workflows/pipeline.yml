@@ -41,14 +41,15 @@ jobs:
 
       - name: Check for critical issues
         run: |
-          CRITICAL_ISSUES=$(curl -s -u ${{ secrets.SONARQUBE_TOKEN }} "${{ secrets.SONAR_HOST_URL }}/api/issues/search?severity=CRITICAL&projectKeys=nessmahm_calculator")
+          CRITICAL_ISSUES=$(curl -s -u ${{ secrets.SONARQUBE_TOKEN }}: "https://your-sonar-instance/api/issues/search?severity=CRITICAL&projectKeys=nessmahm_calculator")
           if [[ $(echo $CRITICAL_ISSUES | jq '.total') -gt 0 ]]; then
-            echo "Critical issues detected, stopping the build!";
-            exit 1;  # Arrêter la construction si des problèmes critiques sont trouvés
+          echo "Critical issues detected, stopping the build!";
+          exit 1;  # Arrêter la construction si des problèmes critiques sont trouvés
           fi
-      
-      
 
-      #Afficher un message de confirmation
+
+
+
+#Afficher un message de confirmation
       - name: Confirm Build Success
         run: echo "Build completed successfully!"
