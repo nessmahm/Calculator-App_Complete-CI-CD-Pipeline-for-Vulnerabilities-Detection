@@ -41,17 +41,20 @@ jobs:
           args: >
             -Dsonar.projectKey=nessmahm_calculator
             -Dsonar.qualitygate.wait=true # Attendre l'état de la Quality Gate
+            -Dsonar.qualitygate.timeout=300
 
-      - name: Check Quality Gate Status
-        run: |
-          STATUS=$(curl -s -u ${{ secrets.SONARQUBE_TOKEN }}: "${{ secrets.SONAR_HOST_URL }}/api/qualitygates/project_status?projectKey=nessmahm_calculator" | jq -r '.projectStatus.status')
-          if [ "$STATUS" != "OK" ]; then
-          echo "Quality Gate failed: $STATUS"
-          exit 1
-          fi
+      # Check the Quality Gate status.
+      - name: SonarQube Server Quality Gate check
+        id: sonarqube-quality-gate-check
+        uses: sonarsource/sonarqube-quality-gate-action@master
+        with:
+          pollingTimeoutSec: 600
         env:
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-#Afficher un message de confirmation
+          SONAR_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} #OPTIONAL
+
+      - name: "Example show SonarQube Server Quality Gate Status value"
+        run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
+
       - name: Confirm Build Success
         run: echo "Build completed successfully!"
