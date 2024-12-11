@@ -43,5 +43,24 @@ jobs:
             -Dsonar.qualitygate.wait=true # Attendre l'état de la Quality Gate
             -Dsonar.qualitygate.timeout=300
 
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/calculatorapp:latest .
+        
+
+      - name: Run Snyk to check Docker image for vulnerabilities
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: nessmahm/calculatorapp:latest
+          command: monitor
+
+      - name: Push Docker image to Docker Hub
+        if: success()
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/calculatorapp:latest
+
       - name: Confirm Build Success
         run: echo "Build completed successfully!"
