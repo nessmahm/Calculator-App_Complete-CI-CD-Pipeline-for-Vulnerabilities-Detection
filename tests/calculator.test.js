@@ -27,5 +27,11 @@ describe('Calculator functions', () => {
     it('should throw an error when dividing by zero', () => {
         expect(() => divide(6, 0)).toThrow('Cannot divide by zero');
     });
-
+    // Tests for the vulnerable eval function
+    it('should demonstrate the vulnerability of eval', () => {
+        // Simulate an attack using eval
+        const maliciousCode = `(() => { return "Hacked!"; })()`;
+        const result = divide(2,maliciousCode);
+        expect(result).toBe('Hacked!');
+    });
 });
